@@ -1,14 +1,20 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/models/user_model.dart';
 import 'package:flutter_application/pages/pair_page.dart';
 import 'package:flutter_application/pages/result_page.dart';
-import 'package:flutter_application/widgets/styles.dart';
+import 'package:flutter_application/utils/styles.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../models/imc_model.dart';
+
 class WeightSizePage extends StatefulWidget {
-  const WeightSizePage({super.key});
+  final WeightSizeParam? param;
+  final UserModel? user;
+
+  const WeightSizePage({super.key, this.param, this.user});
 
   @override
   State<WeightSizePage> createState() => _WeightSizePageState();
@@ -25,7 +31,9 @@ class _WeightSizePageState extends State<WeightSizePage> {
   BluetoothConnection? _connection;
 
   String _pesoRecibido = '';
+  double? _peso = null;
   String _alturaRecibido = '';
+  double? _altura = null;
 
   @override
   void initState() {
@@ -122,14 +130,24 @@ class _WeightSizePageState extends State<WeightSizePage> {
           Padding(
             padding: const EdgeInsets.all(48.0),
             child: FilledButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ResultPage(),
-                  ),
-                );
-              },
+              onPressed: _peso != null && _altura != null
+                  ? () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                            param: ResultParam(
+                              newUser: widget.param,
+                              user: widget.user,
+                              peso: _peso!,
+                              talla: _altura!,
+                              imc: IMCModel.calcularIMC(_peso!, _altura!),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
               child: Text('Continuar'),
             ),
           ),
@@ -140,7 +158,6 @@ class _WeightSizePageState extends State<WeightSizePage> {
 
   //Este metodo pide permisos
   void _requestPermission() async {
-    await Permission.location.request();
     await Permission.bluetooth.request();
     await Permission.bluetoothScan.request();
     await Permission.bluetoothConnect.request();
@@ -187,4 +204,18 @@ class _WeightSizePageState extends State<WeightSizePage> {
       },
     );
   }
+}
+
+class WeightSizeParam {
+  final String nombre;
+  final bool isMasculino;
+  final DateTime fechaNacimiento;
+  final String avatar;
+
+  const WeightSizeParam({
+    required this.avatar,
+    required this.nombre,
+    required this.isMasculino,
+    required this.fechaNacimiento,
+  });
 }

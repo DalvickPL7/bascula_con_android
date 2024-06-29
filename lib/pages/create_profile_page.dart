@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application/pages/weight_size_page.dart';
-import 'package:flutter_application/widgets/colors.dart';
-import 'package:flutter_application/widgets/styles.dart';
+import 'package:flutter_application/utils/colors.dart';
+import 'package:flutter_application/utils/styles.dart';
 
 class CreateProfilePage extends StatefulWidget {
   const CreateProfilePage({super.key});
@@ -12,6 +12,8 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
+  final _formKey = GlobalKey<FormState>();
+
   String _imagen = 'assets/images/img_rabano.png';
 
   final _nombre = TextEditingController();
@@ -25,10 +27,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(48.0),
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(48.0, 0, 48.0, 48.0,),
+          child: Form(
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,10 +51,20 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 Center(
                   child: avatar(),
                 ),
-                const Text("¿Cómo te llamas?", style: MyTextStyle.titleInputs),
-                TextFormField(controller: _nombre),
+                const Text("¿Cómo te llamas?",
+                    style: MyTextStyle.titleInputs),
+                TextFormField(
+                  controller: _nombre,
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length < 2) {
+                      return 'Ingresa tu nombre';
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 32),
-                const Text("¿Cúal es tu género?", style: MyTextStyle.titleInputs),
+                const Text("¿Cúal es tu género?",
+                    style: MyTextStyle.titleInputs),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -78,7 +92,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   ],
                 ),
                 const SizedBox(height: 32),
-                const Text("¿Cúando naciste?", style: MyTextStyle.titleInputs),
+                const Text("¿Cúando naciste?",
+                    style: MyTextStyle.titleInputs),
                 Row(
                   children: [
                     SizedBox(
@@ -91,6 +106,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(2),
                         ],
+                        validator: (value) {
+                          final dia = int.tryParse(value ?? '');
+                          if (dia == null || dia < 0 || dia > 31) {
+                            return 'Ingresa el día';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     const Text('/'),
@@ -104,6 +126,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(2),
                         ],
+                        validator: (value) {
+                          final mes = int.tryParse(value ?? '');
+                          if (mes == null || mes < 1 || mes > 12) {
+                            return 'Ingresa el mes';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     const Text('/'),
@@ -117,6 +146,13 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           FilteringTextInputFormatter.digitsOnly,
                           LengthLimitingTextInputFormatter(4),
                         ],
+                        validator: (value) {
+                          final anio = int.tryParse(value ?? '');
+                          if (anio == null || anio < 1900 || anio > 2023) {
+                            return 'Ingresa el año';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ],
@@ -126,12 +162,31 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   child: FilledButton(
                     onPressed: () {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const WeightSizePage(),
-                        ),
-                      );
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WeightSizePage(
+                              param: WeightSizeParam(
+                                avatar: _imagen,
+                                nombre: _nombre.text,
+                                isMasculino: _masculino,
+                                fechaNacimiento: DateTime(
+                                  int.parse(_anio.text),
+                                  int.parse(_mes.text),
+                                  int.parse(_dia.text),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content:
+                                  Text('Hay un error. Revisa tus datos')),
+                        );
+                      }
                     },
                     child: const Text('Continuar'),
                   ),

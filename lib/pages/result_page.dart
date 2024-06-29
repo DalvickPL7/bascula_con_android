@@ -1,23 +1,35 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application/models/history_model.dart';
+import 'package:flutter_application/models/user_model.dart';
 import 'package:flutter_application/pages/tip_page.dart';
 import 'package:flutter_application/pages/weight_size_page.dart';
-import 'package:flutter_application/widgets/colors.dart';
-import 'package:flutter_application/widgets/styles.dart';
+import 'package:flutter_application/utils/colors.dart';
+import 'package:flutter_application/utils/styles.dart';
+import 'package:hive/hive.dart';
+
+import '../helpers/hive_box_helper.dart';
+import '../models/imc_model.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
+  final ResultParam param;
+
+  const ResultPage({super.key, required this.param});
 
   @override
   State<ResultPage> createState() => _ResultPageState();
 }
 
 class _ResultPageState extends State<ResultPage> {
-  String _graficoImc = 'assets/images/indicador_saludable.png';
-  String _personaImc = 'assets/images/silueta_m_saludable.png';
+  late IMCModel imcModel;
+  String _textoContinuar = 'Continuar';
 
-  double peso = 37.00;
-  double talla = 177.20;
-  double imc = 20.35;
+  @override
+  void initState() {
+    imcModel = IMCModel.getImcModel(widget.param.imc);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +47,7 @@ class _ResultPageState extends State<ResultPage> {
                     child: Opacity(
                       opacity: 0.15,
                       child: Image.asset(
-                        _personaImc,
+                        imcModel.indicador,
                         height: 300,
                       ),
                     ),
@@ -47,10 +59,10 @@ class _ResultPageState extends State<ResultPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text("Tu peso es:", style: MyTextStyle.title),
-                          Image.asset(_graficoImc),
+                          Image.asset(imcModel.silueta),
                           Center(
                             child: Text(
-                              "${peso.toStringAsFixed(1)} Kg",
+                              "${widget.param.peso.toStringAsFixed(1)} Kg",
                               style: const TextStyle(
                                 fontSize: 56,
                                 fontWeight: FontWeight.w700,
@@ -59,7 +71,7 @@ class _ResultPageState extends State<ResultPage> {
                           ),
                           Center(
                             child: Text(
-                              "${talla.toStringAsFixed(1)} cm",
+                              "${widget.param.talla.toStringAsFixed(1)} cm",
                               style: const TextStyle(
                                 fontSize: 48,
                                 fontWeight: FontWeight.w700,
@@ -67,11 +79,11 @@ class _ResultPageState extends State<ResultPage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 32),
-                          Text("Tu IMC es:", style: MyTextStyle.title),
+                          const SizedBox(height: 32),
+                          const Text("Tu IMC es:", style: MyTextStyle.title),
                           Center(
                             child: Text(
-                              "${imc.toStringAsFixed(2)}",
+                              "${widget.param.imc.toStringAsFixed(2)}",
                               style: const TextStyle(
                                 fontSize: 56,
                                 fontWeight: FontWeight.w700,
@@ -98,15 +110,31 @@ class _ResultPageState extends State<ResultPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(36, 0, 36, 0),
               child: FilledButton(
-                onPressed: () {
+                onPressed: () async {
+                  if (widget.param.newUser != null) {
+                    setState(() {
+                      _textoContinuar = "Guardando datos...";
+                    });
+                    await _addUser();
+                  } else {
+                    setState(() {
+                      _textoContinuar = "Guardando datos...";
+                    });
+                    await _saveUser();
+                  }
+
+                  Random random = new Random();
+                  int numeroAleatorio = random.nextInt(imcModel.tips.length);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TipPage(),
+                      builder: (context) => TipPage(
+                        tip: imcModel.tips[numeroAleatorio],
+                      ),
                     ),
                   );
                 },
-                child: Text('Continuar'),
+                child: Text(_textoContinuar),
               ),
             ),
             Row(
@@ -120,12 +148,14 @@ class _ResultPageState extends State<ResultPage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const WeightSizePage(),
+                        builder: (context) => WeightSizePage(
+                          param: widget.param.newUser,
+                        ),
                       ),
                     );
                   },
                   child: const Text(
-                    'Sube de nuevoa la balanza',
+                    'Sube de nuevo a la balanza',
                     style: TextStyle(
                         fontWeight: FontWeight.w700, letterSpacing: -0.5),
                   ),
@@ -137,4 +167,88 @@ class _ResultPageState extends State<ResultPage> {
       ),
     );
   }
+
+  Future<void> _addUser() async {
+    Box<UserModel> userBox = await HiveBoxHelper.openUserBox();
+    final id = generateUuid();
+    final user = widget.param.newUser!;
+    await userBox.put(
+      id,
+      UserModel(
+        uid: id,
+        avatar: user.avatar,
+        nombre: user.nombre,
+        isMasculino: user.isMasculino,
+        fechaNacimiento: user.fechaNacimiento,
+        pesoActual: widget.param.peso,
+        tallaActual: widget.param.talla,
+        imcActual: widget.param.imc,
+        historial: [
+          HistoryModel(
+            peso: widget.param.peso,
+            talla: widget.param.talla,
+            imc: widget.param.imc,
+            fecha: DateTime.now(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _saveUser() async {
+    Box<UserModel> userBox = await HiveBoxHelper.openUserBox();
+    final UserModel user = widget.param.user!;
+    await userBox.put(
+      user.uid,
+      UserModel(
+        uid: user.uid,
+        avatar: user.avatar,
+        nombre: user.nombre,
+        isMasculino: user.isMasculino,
+        fechaNacimiento: user.fechaNacimiento,
+        pesoActual: widget.param.peso,
+        tallaActual: widget.param.talla,
+        imcActual: widget.param.imc,
+        historial: [
+          HistoryModel(
+            peso: widget.param.peso,
+            talla: widget.param.talla,
+            imc: widget.param.imc,
+            fecha: DateTime.now(),
+          ),
+          ...user.historial,
+        ],
+      ),
+    );
+  }
+
+  static String generateUuid() {
+    final Random random = Random();
+
+    String generateRandomHex(int length) {
+      String result = "";
+      for (int i = 0; i < length; i++) {
+        result += random.nextInt(16).toRadixString(16);
+      }
+      return result;
+    }
+
+    return "${generateRandomHex(8)}-${generateRandomHex(4)}-4${generateRandomHex(3)}-a${generateRandomHex(3)}-${generateRandomHex(12)}";
+  }
+}
+
+class ResultParam {
+  final WeightSizeParam? newUser;
+  final UserModel? user;
+  final double peso; //en cm
+  final double talla; //en kg
+  final double imc;
+
+  const ResultParam({
+    required this.newUser,
+    required this.user,
+    required this.peso,
+    required this.talla,
+    required this.imc,
+  });
 }
