@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class _WeightSizePageState extends State<WeightSizePage> {
 
   //es el quien guarda la direccion/nombre del dispositivo conectado
   BluetoothConnection? _connection;
+
+  String buffer = '';
 
   String _pesoRecibido = '';
   double? _peso = null;
@@ -106,7 +109,7 @@ class _WeightSizePageState extends State<WeightSizePage> {
                   ),
                   Center(
                     child: Text(
-                      "177${_pesoRecibido} cm",
+                      "${_altura?.toStringAsFixed(2) ?? ''} cm",
                       style: TextStyle(fontSize: 56),
                     ),
                   ),
@@ -119,7 +122,8 @@ class _WeightSizePageState extends State<WeightSizePage> {
                   ),
                   Center(
                     child: Text(
-                      "1323${_alturaRecibido} Kg",
+                      _pesoRecibido,
+                      // "${_peso?.toStringAsFixed(2) ?? ''} Kg",
                       style: TextStyle(fontSize: 56),
                     ),
                   ),
@@ -158,6 +162,7 @@ class _WeightSizePageState extends State<WeightSizePage> {
 
   //Este metodo pide permisos
   void _requestPermission() async {
+    await Permission.location.request();
     await Permission.bluetooth.request();
     await Permission.bluetoothScan.request();
     await Permission.bluetoothConnect.request();
@@ -165,42 +170,33 @@ class _WeightSizePageState extends State<WeightSizePage> {
 
   void _receiveData() {
     _connection?.input?.listen(
-      (event) {
-        // Allocate buffer for parsed data
-        int backspacesCounter = 0;
-        event.forEach((byte) {
-          if (byte == 8 || byte == 127) {
-            backspacesCounter++;
-          }
-        });
-        print("event: $event");
-        print("buffer: ${event.length} - ${backspacesCounter}");
-        Uint8List buffer = Uint8List(event.length - backspacesCounter);
-        int bufferIndex = buffer.length;
+      (Uint8List data) {
+        String receivedData = ascii.decode(data);
+        buffer += receivedData;
 
-        // Apply backspace control character
-        backspacesCounter = 0;
-        for (int i = event.length - 1; i >= 0; i--) {
-          if (event[i] == 8 || event[i] == 127) {
-            backspacesCounter++;
-          } else {
-            if (backspacesCounter > 0) {
-              backspacesCounter--;
-            } else {
-              buffer[--bufferIndex] = event[i];
-            }
+        int index;
+        while ((index = buffer.indexOf('\n')) != -1) {
+          String message = buffer.substring(0, index).trim();
+          buffer = buffer.substring(index + 1);
+
+          print("====> $message");
+          if (message.contains('P')) {
+            setState(() {
+              _pesoRecibido = message.replaceAll('P', '');
+              _peso = double.tryParse(_pesoRecibido);
+            });
+          } else if (message.contains('T')) {
+            setState(() {
+              _alturaRecibido = message.replaceAll('T', '');
+              _altura = double.tryParse(_alturaRecibido);
+            });
           }
         }
 
-        // Create message if there is new line character
-        print("\n ====> " + String.fromCharCodes(buffer));
-        setState(() {
-          _pesoRecibido = "${String.fromCharCodes(buffer)}";
-          _alturaRecibido = "${String.fromCharCodes(buffer)}";
-        });
-        // message = String.fromCharCodes(event);
-        // if (String.fromCharCodes(event) == "p") {
-        // }
+        if (ascii.decode(data).contains('!')) {
+          // connection.finish(); // Closing connection
+          print('Disconnecting by local host');
+        }
       },
     );
   }
