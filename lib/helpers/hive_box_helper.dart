@@ -15,4 +15,6 @@ class HiveBoxHelper {
       Hive.openBox<UserModel>('users');
 
   static Box<UserModel> getUserBox() => Hive.box<UserModel>('users');
+
+  static Box<String> getBluetoothAddressBox() => Hive.box('BluetoothAddress');
 }

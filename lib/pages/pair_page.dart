@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
+import '../helpers/hive_box_helper.dart';
+
 class PairPage extends StatefulWidget {
   const PairPage({super.key});
 
@@ -88,6 +90,7 @@ class _PairPageState extends State<PairPage> {
 
     _connection = await BluetoothConnection.toAddress(
         device.address);
+    _putAddress(device.address);
     _deviceConnected = device;
     _devices = [];
     _isConnecting = false;
@@ -102,5 +105,10 @@ class _PairPageState extends State<PairPage> {
   void _getDevices() async {
     var res = await _bluetooth.getBondedDevices();
     setState(() => _devices = res);
+  }
+
+  _putAddress(String address){
+    var box = HiveBoxHelper.getBluetoothAddressBox();
+    box.put('H06', address);
   }
 }

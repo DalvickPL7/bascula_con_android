@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/helpers/hive_box_helper.dart';
 import 'package:flutter_application/models/user_model.dart';
 import 'package:flutter_application/pages/pair_page.dart';
 import 'package:flutter_application/pages/result_page.dart';
 import 'package:flutter_application/utils/styles.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../models/imc_model.dart';
@@ -43,6 +45,7 @@ class _WeightSizePageState extends State<WeightSizePage> {
     super.initState();
     _requestPermission();
 
+    print('  >>>  _WeightSizePageState‐initState» _bluetooth.name» ${_bluetooth.name}');
     _bluetooth.state.then((state) {
       setState(() => _bluetoothState = state.isEnabled);
     });
@@ -57,6 +60,14 @@ class _WeightSizePageState extends State<WeightSizePage> {
           break;
       }
     });
+  }
+
+  _getAddress() async {
+    var box = HiveBoxHelper.getBluetoothAddressBox();
+    var name = box.get('H06');
+    if (name != null && name.isNotEmpty) {
+      _connection = await BluetoothConnection.toAddress(name);
+    }
   }
 
   @override
