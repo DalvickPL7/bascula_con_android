@@ -62,6 +62,13 @@ class _WeightSizePageState extends State<WeightSizePage> {
     });
   }
 
+
+  @override
+  void dispose() {
+    _connection?.finish();
+    super.dispose();
+  }
+
   _getAddress() async {
     var box = HiveBoxHelper.getBluetoothAddressBox();
     var name = box.get('H06');

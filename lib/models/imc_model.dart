@@ -123,6 +123,7 @@ class IMCModel {
   }
 
   static double calcularIMC(double peso, double altura) {
-    return 0;
+    double alturaMetro = altura/100;
+    return peso / (alturaMetro * alturaMetro);
   }
 }

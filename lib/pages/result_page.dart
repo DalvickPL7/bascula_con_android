@@ -47,7 +47,7 @@ class _ResultPageState extends State<ResultPage> {
                     child: Opacity(
                       opacity: 0.15,
                       child: Image.asset(
-                        imcModel.indicador,
+                        imcModel.silueta,
                         height: 300,
                       ),
                     ),
@@ -59,7 +59,7 @@ class _ResultPageState extends State<ResultPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text("Tu peso es:", style: MyTextStyle.title),
-                          Image.asset(imcModel.silueta),
+                          Image.asset(imcModel.indicador),
                           Center(
                             child: Text(
                               "${widget.param.peso.toStringAsFixed(1)} Kg",
@@ -150,6 +150,7 @@ class _ResultPageState extends State<ResultPage> {
                       MaterialPageRoute(
                         builder: (context) => WeightSizePage(
                           param: widget.param.newUser,
+                          user: widget.param.user,
                         ),
                       ),
                     );

@@ -18,6 +18,12 @@ class _PairPageState extends State<PairPage> {
   final _bluetooth = FlutterBluetoothSerial.instance;
 
   @override
+  void initState() {
+    _getDevices();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +81,7 @@ class _PairPageState extends State<PairPage> {
                 onTap: () => _setConnection(device),
                 title: Text(device.name ?? device.address),
                 trailing: TextButton(
-                  child: const Text('Conectar'),
+                  child: const Text('Escuchar'),
                   onPressed: () => _setConnection(device),
                 ),
               ),
@@ -90,7 +96,7 @@ class _PairPageState extends State<PairPage> {
 
     _connection = await BluetoothConnection.toAddress(
         device.address);
-    _putAddress(device.address);
+    // _putAddress(device.address);
     _deviceConnected = device;
     _devices = [];
     _isConnecting = false;

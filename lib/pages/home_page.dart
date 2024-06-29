@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/models/history_model.dart';
 import 'package:flutter_application/models/imc_model.dart';
 import 'package:flutter_application/pages/create_profile_page.dart';
 import 'package:flutter_application/pages/profile_page.dart';
@@ -42,6 +41,8 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => const CreateProfilePage(),
                 ),
               );
+
+              getUsers();
             },
             icon: const Icon(
               Icons.add,
@@ -63,6 +64,8 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) => const CreateProfilePage(),
                     ),
                   );
+
+                  getUsers();
                 },
               ),
             ),
@@ -131,13 +134,15 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               final user = users[index];
               return InkWell(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProfilePage(user: user),
                     ),
                   );
+
+                  getUsers();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -212,8 +217,9 @@ class _HomePageState extends State<HomePage> {
 
   void getUsers() async {
     Box<UserModel> usersBox = await HiveBoxHelper.openUserBox();
+    final userList = usersBox.values.toList();
     setState(() {
-      users = usersBox.values.toList();
+      users = userList;
     });
   }
 }

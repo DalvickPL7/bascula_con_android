@@ -46,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               );
-              _refreshUser();
+              await _refreshUser();
             },
             icon: const Icon(Icons.add),
           )
@@ -200,38 +200,43 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: user.historial.length,
-                itemBuilder: (context, index) {
-                  final item = user.historial[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Text(
-                            formatter.format(item.fecha),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            item.talla.toStringAsFixed(2),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            item.peso.toStringAsFixed(2),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  return _refreshUser();
                 },
+                child: ListView.builder(
+                  itemCount: user.historial.length,
+                  itemBuilder: (context, index) {
+                    final item = user.historial[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              formatter.format(item.fecha),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              item.talla.toStringAsFixed(2),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              item.peso.toStringAsFixed(2),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -240,10 +245,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _refreshUser() async {
-    print('  >>>  _ProfilePageState‐_refreshUser» » ');
+  Future<void> _refreshUser() async {
     Box<UserModel> userBox = await HiveBoxHelper.openUserBox();
     UserModel? userModel = userBox.get(widget.user.uid);
+    print('  >>>  _ProfilePageState‐_refreshUser» » ${userModel?.nombre}');
     if (userModel != null) {
       setState(() {
         user = userModel;
