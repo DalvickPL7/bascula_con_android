@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application/pages/select_avatar_page.dart';
 import 'package:flutter_application/pages/weight_size_page.dart';
 import 'package:flutter_application/utils/colors.dart';
 import 'package:flutter_application/utils/styles.dart';
@@ -30,7 +31,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(48.0, 0, 48.0, 48.0,),
+          padding: const EdgeInsets.fromLTRB(
+            48.0,
+            0,
+            48.0,
+            48.0,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
@@ -51,8 +57,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 Center(
                   child: avatar(),
                 ),
-                const Text("¿Cómo te llamas?",
-                    style: MyTextStyle.titleInputs),
+                const Text("¿Cómo te llamas?", style: MyTextStyle.titleInputs),
                 TextFormField(
                   controller: _nombre,
                   validator: (value) {
@@ -92,8 +97,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   ],
                 ),
                 const SizedBox(height: 32),
-                const Text("¿Cúando naciste?",
-                    style: MyTextStyle.titleInputs),
+                const Text("¿Cúando naciste?", style: MyTextStyle.titleInputs),
                 Row(
                   children: [
                     SizedBox(
@@ -183,8 +187,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content:
-                                  Text('Hay un error. Revisa tus datos')),
+                              content: Text('Hay un error. Revisa tus datos')),
                         );
                       }
                     },
@@ -217,7 +220,20 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           bottom: 0,
           right: 0,
           child: FloatingActionButton.small(
-            onPressed: () {},
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SelectAvatarPage(),
+                ),
+              );
+
+              if (result != null) {
+                setState(() {
+                  _imagen = result;
+                });
+              }
+            },
             backgroundColor: MyColors.primary,
             child: const Icon(
               Icons.edit,
