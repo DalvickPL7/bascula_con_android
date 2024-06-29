@@ -22,11 +22,11 @@ class IMCModel {
         color: Color(0xFF49bade),
         nombre: "Bajo",
         tips: [
-          TipModel('assets/images/tip1.png', 'Come más y variado',
+          TipModel('assets/images/tip1.jpg', 'Come más y variado',
               'Come muchas frutas, verduras, carnes, y granos. ¡Tu cuerpo necesita energía para crecer fuerte como un superhéroe!'),
-          TipModel('assets/images/tip2.png', 'Snack saludables',
+          TipModel('assets/images/tip2.jpg', 'Snack saludables',
               'Come almendras, frutas secas, y yogur entre comidas. ¡Son deliciosos y te darán mucha energía!'),
-          TipModel('assets/images/tip3.png', 'Bebe leche',
+          TipModel('assets/images/tip3.jpg', 'Bebe leche',
               'La leche y los productos lácteos te ayudan a tener huesos fuertes como los de un robot'),
         ],
       );
@@ -37,11 +37,11 @@ class IMCModel {
         color: Color(0xFF98b33c),
         nombre: "Saludable",
         tips: [
-          TipModel('assets/images/tip4.png', 'Sigue así',
+          TipModel('assets/images/tip4.jpg', 'Sigue así',
               '¡Estás en un buen camino! Come una variedad de alimentos para mantener tu energía como un corredor rápido.'),
-          TipModel('assets/images/tip5.png', 'Juega mucho',
+          TipModel('assets/images/tip5.jpg', 'Juega mucho',
               'Jugar deportes, correr, y saltar son formas divertidas de mantener tu cuerpo fuerte y saludable'),
-          TipModel('assets/images/tip6.png', 'Dormir bien',
+          TipModel('assets/images/tip6.jpg', 'Dormir bien',
               'Dormir bien te hace sentir como un campeón cada día. ¡Asegúrate de dormir al menos 8 horas cada noche!'),
         ],
       );
@@ -52,11 +52,11 @@ class IMCModel {
         color: Color(0xFFfc8133),
         nombre: "Sobrepeso",
         tips: [
-          TipModel('assets/images/tip7.png', 'Moverse más',
+          TipModel('assets/images/tip7.jpg', 'Moverse más',
               'Haz que tu cuerpo se mueva. Baila, corre, o juega fútbol. ¡Así quemas energía como un dragón escupiendo fuego!'),
-          TipModel('assets/images/tip8.png', 'Come frutas y verduras',
+          TipModel('assets/images/tip8.jpg', 'Come frutas y verduras',
               'Come más zanahorias, manzanas, y otras frutas y verduras. Son como las pociones mágicas de los videojuegos, llenas de cosas buenas para ti.'),
-          TipModel('assets/images/tip9.png', 'Menos comida chatarra',
+          TipModel('assets/images/tip9.jpg', 'Menos comida chatarra',
               'Trata de comer menos papas fritas y dulces. ¡Es como evitar los obstáculos en un juego para ganar más puntos!'),
         ],
       );
@@ -67,11 +67,11 @@ class IMCModel {
         color: Color(0xFFef433b),
         nombre: "Obesidad I",
         tips: [
-          TipModel('assets/images/tip10.png', 'Plan de acción',
+          TipModel('assets/images/tip10.jpg', 'Plan de acción',
               'Trabaja con tus papás y tu doctor para hacer un plan de alimentación divertido y saludable. ¡Es como tener un mapa del tesoro para la salud!'),
-          TipModel('assets/images/tip11.png', 'Actividades divertidas',
+          TipModel('assets/images/tip11.jpg', 'Actividades divertidas',
               'Encuentra un deporte o una actividad que te guste, como nadar, andar en bicicleta, o bailar. ¡Mueve tu cuerpo como si estuvieras en una aventura épica!'),
-          TipModel('assets/images/tip12.png', 'Beber agua',
+          TipModel('assets/images/tip12.jpg', 'Beber agua',
               'Bebe mucha agua en lugar de refrescos. ¡El agua es como la poción mágica que te mantiene hidratado y listo para cualquier desafío!'),
         ],
       );
