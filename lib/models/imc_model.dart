@@ -22,11 +22,11 @@ class IMCModel {
         color: Color(0xFF49bade),
         nombre: "Bajo",
         tips: [
-          TipModel('', 'Come más y variado',
+          TipModel('assets/images/tip1.png', 'Come más y variado',
               'Come muchas frutas, verduras, carnes, y granos. ¡Tu cuerpo necesita energía para crecer fuerte como un superhéroe!'),
-          TipModel('', 'Snack saludables',
+          TipModel('assets/images/tip2.png', 'Snack saludables',
               'Come almendras, frutas secas, y yogur entre comidas. ¡Son deliciosos y te darán mucha energía!'),
-          TipModel('', 'Bebe leche',
+          TipModel('assets/images/tip3.png', 'Bebe leche',
               'La leche y los productos lácteos te ayudan a tener huesos fuertes como los de un robot'),
         ],
       );
@@ -34,14 +34,14 @@ class IMCModel {
   factory IMCModel.saludable() => IMCModel(
         indicador: 'assets/images/indicador_saludable.png',
         silueta: 'assets/images/silueta_v_saludable.png',
-    color: Color(0xFF98b33c),
-    nombre: "Saludable",
+        color: Color(0xFF98b33c),
+        nombre: "Saludable",
         tips: [
-          TipModel('', 'Sigue así',
+          TipModel('assets/images/tip4.png', 'Sigue así',
               '¡Estás en un buen camino! Come una variedad de alimentos para mantener tu energía como un corredor rápido.'),
-          TipModel('', 'Juega mucho',
+          TipModel('assets/images/tip5.png', 'Juega mucho',
               'Jugar deportes, correr, y saltar son formas divertidas de mantener tu cuerpo fuerte y saludable'),
-          TipModel('', 'Dormir bien',
+          TipModel('assets/images/tip6.png', 'Dormir bien',
               'Dormir bien te hace sentir como un campeón cada día. ¡Asegúrate de dormir al menos 8 horas cada noche!'),
         ],
       );
@@ -49,14 +49,14 @@ class IMCModel {
   factory IMCModel.sobrepeso() => IMCModel(
         indicador: 'assets/images/indicador_sobrepeso.png',
         silueta: 'assets/images/silueta_v_sobrepeso.png',
-    color: Color(0xFFfc8133),
-    nombre: "Sobrepeso",
+        color: Color(0xFFfc8133),
+        nombre: "Sobrepeso",
         tips: [
-          TipModel('', 'Moverse más',
+          TipModel('assets/images/tip7.png', 'Moverse más',
               'Haz que tu cuerpo se mueva. Baila, corre, o juega fútbol. ¡Así quemas energía como un dragón escupiendo fuego!'),
-          TipModel('', 'Come frutas y verduras',
+          TipModel('assets/images/tip8.png', 'Come frutas y verduras',
               'Come más zanahorias, manzanas, y otras frutas y verduras. Son como las pociones mágicas de los videojuegos, llenas de cosas buenas para ti.'),
-          TipModel('', 'Menos comida chatarra',
+          TipModel('assets/images/tip9.png', 'Menos comida chatarra',
               'Trata de comer menos papas fritas y dulces. ¡Es como evitar los obstáculos en un juego para ganar más puntos!'),
         ],
       );
@@ -64,14 +64,14 @@ class IMCModel {
   factory IMCModel.obesidadI() => IMCModel(
         indicador: 'assets/images/indicador_obesidad_I.png',
         silueta: 'assets/images/silueta_v_obesidad_I.png',
-    color: Color(0xFFef433b),
-    nombre: "Obesidad I",
+        color: Color(0xFFef433b),
+        nombre: "Obesidad I",
         tips: [
-          TipModel('', 'Plan de acción',
+          TipModel('assets/images/tip10.png', 'Plan de acción',
               'Trabaja con tus papás y tu doctor para hacer un plan de alimentación divertido y saludable. ¡Es como tener un mapa del tesoro para la salud!'),
-          TipModel('', 'Actividades divertidas',
+          TipModel('assets/images/tip11.png', 'Actividades divertidas',
               'Encuentra un deporte o una actividad que te guste, como nadar, andar en bicicleta, o bailar. ¡Mueve tu cuerpo como si estuvieras en una aventura épica!'),
-          TipModel('', 'Beber agua',
+          TipModel('assets/images/tip12.png', 'Beber agua',
               'Bebe mucha agua en lugar de refrescos. ¡El agua es como la poción mágica que te mantiene hidratado y listo para cualquier desafío!'),
         ],
       );
@@ -79,14 +79,14 @@ class IMCModel {
   factory IMCModel.obesidadII() => IMCModel(
         indicador: 'assets/images/indicador_obesidad_II.png',
         silueta: 'assets/images/silueta_v_obesidad_II.png',
-    color: Color(0xFFc53c8a),
-    nombre: "Obesidad II",
+        color: Color(0xFFc53c8a),
+        nombre: "Obesidad II",
         tips: [
-          TipModel('', 'Plan de acción',
+          TipModel('assets/images/tip10.png', 'Plan de acción',
               'Trabaja con tus papás y tu doctor para hacer un plan de alimentación divertido y saludable. ¡Es como tener un mapa del tesoro para la salud!'),
-          TipModel('', 'Actividades divertidas',
+          TipModel('assets/images/tip11.png', 'Actividades divertidas',
               'Encuentra un deporte o una actividad que te guste, como nadar, andar en bicicleta, o bailar. ¡Mueve tu cuerpo como si estuvieras en una aventura épica!'),
-          TipModel('', 'Beber agua',
+          TipModel('assets/images/tip12.png', 'Beber agua',
               'Bebe mucha agua en lugar de refrescos. ¡El agua es como la poción mágica que te mantiene hidratado y listo para cualquier desafío!'),
         ],
       );
@@ -94,14 +94,14 @@ class IMCModel {
   factory IMCModel.obesidadIII() => IMCModel(
         indicador: 'assets/images/indicador_obesidad_III.png',
         silueta: 'assets/images/silueta_v_obesidad_III.png',
-    color: Color(0xFF9a3eb8),
-    nombre: "Obesidad III",
+        color: Color(0xFF9a3eb8),
+        nombre: "Obesidad III",
         tips: [
-          TipModel('', 'Plan de acción',
+          TipModel('assets/images/tip10.png', 'Plan de acción',
               'Trabaja con tus papás y tu doctor para hacer un plan de alimentación divertido y saludable. ¡Es como tener un mapa del tesoro para la salud!'),
-          TipModel('', 'Actividades divertidas',
+          TipModel('assets/images/tip11.png', 'Actividades divertidas',
               'Encuentra un deporte o una actividad que te guste, como nadar, andar en bicicleta, o bailar. ¡Mueve tu cuerpo como si estuvieras en una aventura épica!'),
-          TipModel('', 'Beber agua',
+          TipModel('assets/images/tip12.png', 'Beber agua',
               'Bebe mucha agua en lugar de refrescos. ¡El agua es como la poción mágica que te mantiene hidratado y listo para cualquier desafío!'),
         ],
       );
@@ -123,7 +123,7 @@ class IMCModel {
   }
 
   static double calcularIMC(double peso, double altura) {
-    double alturaMetro = altura/100;
+    double alturaMetro = altura / 100;
     return peso / (alturaMetro * alturaMetro);
   }
 }
